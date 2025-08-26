@@ -17,13 +17,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
+      - name: Debug - List all files
+        run: |
+          echo "=== Current directory ==="
+          pwd
+          ls -la
+          echo "=== Public folder content ==="
+          ls -la public/
+          echo "=== HTML files ==="
+          find . -name "*.html" -type f
+      
       - name: Setup Pages
         uses: actions/configure-pages@v3
         
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: 'public'  # ✅ Change to 'public'
+          path: 'public'
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v2
