@@ -17,9 +17,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: Move HTML to root
+      - name: Debug - List files
+        run: ls -la
+      
+      - name: Find and Move HTML files
         run: |
-          cp -r public/* .  # Public folder ka content root mein copy karein
+          # Pehle check karein public folder exist karta hai ya nahi
+          if [ -d "public" ]; then
+            echo "Public folder found, moving files..."
+            cp -r public/* . 2>/dev/null || true
+          else
+            echo "Public folder not found, checking for index.html in other locations..."
+            # Agar public folder nahi hai, toh direct index.html dhoondein
+            find . -name "index.html" -exec echo "Found index.html at: {}" \;
+          fi
+          
+      - name: List final files
+        run: ls -la
           
       - name: Setup Pages
         uses: actions/configure-pages@v3
@@ -27,7 +41,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: '.'  # Ab root directory serve hoga
+          path: '.'
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v2
