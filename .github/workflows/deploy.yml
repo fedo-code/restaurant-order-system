@@ -17,14 +17,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
+      - name: Move HTML to root
+        run: |
+          cp -r public/* .  # Public folder ka content root mein copy karein
+          
       - name: Setup Pages
         uses: actions/configure-pages@v3
         
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          # Change this to your folder with index.html
-          path: 'public'
+          path: '.'  # Ab root directory serve hoga
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v2
