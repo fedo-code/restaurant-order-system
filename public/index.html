@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-     
+
     <title>Global Inn</title>
     
     <link rel="stylesheet" href="./css/bootstrap.min.css">
@@ -108,5 +108,21 @@
   <script src="./js/bootstrap.min.js"></script>
   <script src="./js/ajax-utils.js"></script>
   <script src="./js/script.js"></script>
+   <script>
+        // Check if running on GitHub Pages
+        if (window.location.hostname.includes('github.io')) {
+            var meta1 = document.createElement('meta');
+            meta1.name = 'referrer';
+            meta1.content = 'no-referrer';
+            document.head.appendChild(meta1);
+            
+            var meta2 = document.createElement('meta');
+            meta2.httpEquiv = 'Content-Security-Policy';
+            meta2.content = "default-src 'self' 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'";
+            document.head.appendChild(meta2);
+            
+            console.log('✅ GitHub Pages security headers added');
+        }
+    </script>
 </body>
 </html>
