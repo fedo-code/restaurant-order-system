@@ -16,25 +16,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # ✅ Saari history fetch karega
-          
-      - name: Debug - Check public folder
-        run: |
-          echo "=== Checking if public folder exists ==="
-          ls -la
-          echo "=== Public folder content ==="
-          ls -la public/ || echo "Public folder not found"
-          echo "=== HTML files in repository ==="
-          find . -name "*.html" -type f
       
       - name: Setup Pages
         uses: actions/configure-pages@v3
         
-      - name: Upload entire repository
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: '.'  # ✅ Entire repository upload karega
+          path: 'public'  # ✅ Now we know this works!
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v2
