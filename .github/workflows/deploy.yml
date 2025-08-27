@@ -20,16 +20,50 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: Fix JavaScript execution
+      - name: Debug - Show exact file structure
+        run: |
+          echo "🔍 Public folder exact structure:"
+          ls -la public/
+          echo "🔍 JS files:"
+          ls -la public/js/ || echo "JS folder not found"
+          echo "🔍 Snippets files:"
+          ls -la public/snippets/ || echo "Snippets folder not found"
+          echo "🔍 Image files:"
+          ls -la public/images/ || echo "Images folder not found"
+      
+      - name: Ensure lowercase paths in HTML
         run: |
           cd public
-          # Force create .nojekyll
+          echo "📝 Fixing paths in index.html..."
+          
+          # JavaScript files ko lowercase ensure karo
+          sed -i 's|src="[^"]*[A-Z][^"]*"|src="js/script.js"|gI' index.html
+          sed -i 's|src="[^"]*SCRIPT[^"]*"|src="js/script.js"|gI' index.html
+          
+          # CSS files ko lowercase ensure karo
+          sed -i 's|href="[^"]*[A-Z][^"]*"|href="css/style.css"|gI' index.html
+          sed -i 's|href="[^"]*STYLE[^"]*"|href="css/style.css"|gI' index.html
+          
+          # Image paths ko lowercase ensure karo
+          sed -i 's|src="[^"]*[A-Z][^"]*"|src="images/ajax-loader.gif"|gI' index.html
+          
+          # Snippet paths ko lowercase ensure karo
+          sed -i 's|"[^"]*[A-Z][^"]*"|"snippets/categories-title-snippet.html"|gI' index.html
+          
+          echo "✅ All paths converted to lowercase"
+      
+      - name: Create .nojekyll file
+        run: |
+          cd public
           touch .nojekyll
-          
-          # Add security headers to HTML file
-          sed -i 's|<head>|<head><meta http-equiv="Content-Security-Policy" content="default-src * '"'self'"' '"'unsafe-inline'"' '"'unsafe-eval'"' data: gap: content:"><meta name="referrer" content="no-referrer"><meta http-equiv="X-Content-Security-Policy" content="default-src * '"'self'"' '"'unsafe-inline'"' '"'unsafe-eval'"' data: gap: content:">|' index.html
-          
-          echo "✅ Security headers added to HTML"
+          echo "✅ .nojekyll file created"
+      
+      - name: Add security headers for GitHub Pages
+        run: |
+          cd public
+          # Security headers add karo
+          sed -i 's|<head>|<head><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src * '"'self'"' '"'unsafe-inline'"' '"'unsafe-eval'"' data: gap: content:">|' index.html
+          echo "✅ Security headers added"
       
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v4
