@@ -4,34 +4,52 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
-
+      
       - name: Create .nojekyll file
         run: |
           cd public
           touch .nojekyll
-          echo ".nojekyll file created"
-
-      - name: List files for debugging
+          echo "✅ .nojekyll file created"
+      
+      - name: Debug - Show folder structure
         run: |
           echo "Public folder content:"
           ls -la public/
           echo "Snippets folder:"
           ls -la public/snippets/ || echo "No snippets folder"
-
+          echo "JS files:"
+          ls -la public/js/ || echo "No JS folder found"
+      
       - name: Setup GitHub Pages
-        uses: actions/configure-pages@v3
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/configure-pages@v4
+        
+      - name: Upload public folder as artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: 'public'  # Only upload public folder
+          path: "public"
 
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
