@@ -23,10 +23,15 @@ jobs:
       
       - name: Debug - Show directory structure
         run: |
-          echo "Complete project structure:"
-          ls -la
           echo "Public folder content:"
           ls -la public/
+          echo "JS files:"
+          ls -la public/js/ || echo "JS folder not found"
+      
+      - name: Create .nojekyll file (Important!)
+        run: |
+          cd public && touch .nojekyll
+          echo "Created .nojekyll file to disable Jekyll processing"
       
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v4
@@ -34,7 +39,7 @@ jobs:
       - name: Upload public folder as artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "public"  # Sirf public folder upload hoga
+          path: "public"
 
   deploy:
     environment:
