@@ -55,10 +55,10 @@ $(function () {
   var menuItemsUrl =
     "https://coursera-jhu-default-rtdb.firebaseio.com/menu_items/";
   //var menuItemsTitleHtml = "snippets/menu-items-title.html";
-  var menuItemHtml = "snippets/menu-item.html";
-    var menuItemsTitleHtml = "snippets/menu-items-title.html";
+  var menuItemHtml = "/snippets/menu-item.html";
+    var menuItemsTitleHtml = "/snippets/menu-items-title.html";
 
-   var snippet = "snippets/paySnpt.html";
+   var snippet = "/snippets/paySnpt.html";
   // Convenience function for inserting innerHTML for 'select'
   var insertHtml = function (selector, html) {
     var targetElem = document.querySelector(selector);
@@ -181,7 +181,7 @@ $(function () {
 
   showLoading("#main-content"); 
 
-  var snippet = "snippets/paySnpt.html";
+  var snippet = "/snippets/paySnpt.html";
 
   $ajaxUtils.sendGetRequest(snippet, function(snippet) {
     var PayView = buildPayHtml(snippet, c_name, s_name, s_price, l_price);
