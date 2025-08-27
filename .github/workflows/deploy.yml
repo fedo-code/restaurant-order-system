@@ -5,20 +5,33 @@ on:
     branches: [main]
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          persist-credentials: false  # ✅ Important fix
 
       - name: Create .nojekyll file
-        run: echo "" > public/.nojekyll
+        run: |
+          cd public
+          touch .nojekyll
+          echo ".nojekyll file created"
+
+      - name: List files for debugging
+        run: |
+          echo "Public folder content:"
+          ls -la public/
+          echo "Snippets folder:"
+          ls -la public/snippets/ || echo "No snippets folder"
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: 'public'  # Only upload public folder
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
-          force_orphan: true
+        id: deployment
+        uses: actions/deploy-pages@v2
