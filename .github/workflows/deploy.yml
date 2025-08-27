@@ -3,6 +3,12 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write  # ✅ Yeh line important hai
 
 jobs:
   build:
@@ -11,18 +17,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: Force create .nojekyll file
+      - name: Create .nojekyll file
         run: |
           cd public
           touch .nojekyll
-          echo "✅ .nojekyll file created forcefully"
+          echo "✅ .nojekyll file created"
       
-      - name: Disable Jekyll processing
-        run: |
-          cd public
-          echo "✅ Jekyll disabled for GitHub Pages"
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
       
-      - name: Upload to GitHub Pages
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: "public"
