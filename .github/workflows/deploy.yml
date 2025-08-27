@@ -17,13 +17,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
+      - name: Copy public files to root
+        run: |
+          # Public folder ka saara content root mein copy karo
+          cp -r public/* .
+          ls -la  # Debugging ke liye
+      
       - name: Setup Pages
         uses: actions/configure-pages@v3
         
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3  # ✅ v3 use karo (pages artifact ke liye)
         with:
-          path: 'public'  # ✅ Now we know this works!
+          path: '.'  # Ab root serve hoga
 
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v3  # ✅ v3 use karo
