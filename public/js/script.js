@@ -47,7 +47,7 @@ $(function () {
 (function (global) {
   var dc = {};
 
-  var homeHtml = "snippets/home-snippet.html";
+  var homeHtml = "/snippets/home-snippet.html";
   var allCategoriesUrl =
     "https://coursera-jhu-default-rtdb.firebaseio.com/categories.json";
   var categoriesTitleHtml = "snippets/categories-title-snippet.html";
@@ -55,10 +55,10 @@ $(function () {
   var menuItemsUrl =
     "https://coursera-jhu-default-rtdb.firebaseio.com/menu_items/";
   //var menuItemsTitleHtml = "snippets/menu-items-title.html";
-  var menuItemHtml = "/snippets/menu-item.html";
-    var menuItemsTitleHtml = "/snippets/menu-items-title.html";
+  var menuItemHtml = "snippets/menu-item.html";
+    var menuItemsTitleHtml = "snippets/menu-items-title.html";
 
-   var snippet = "/snippets/paySnpt.html";
+   var snippet = "snippets/paySnpt.html";
   // Convenience function for inserting innerHTML for 'select'
   var insertHtml = function (selector, html) {
     var targetElem = document.querySelector(selector);
@@ -181,7 +181,7 @@ $(function () {
 
   showLoading("#main-content"); 
 
-  var snippet = "/snippets/paySnpt.html";
+  var snippet = "snippets/paySnpt.html";
 
   $ajaxUtils.sendGetRequest(snippet, function(snippet) {
     var PayView = buildPayHtml(snippet, c_name, s_name, s_price, l_price);
@@ -436,14 +436,14 @@ async function payNow() {
     payBtn.disabled = true;
     payBtn.textContent = 'Processing...';
     
-    // 1. Razorpay load karo
+    // 1. Razorpay load karo 
     await loadRazorpay();
     
     // 2. Order create karo
     const order = await fetch('/api/create-order', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amount: selectedAmountInPaisa })
+      body: JSON.stringify({ amount: selectedAmountInPaisa }) 
     }).then(r => r.json());
     
     // 3. Payment options
@@ -467,7 +467,7 @@ async function payNow() {
         merchant_order_id: order.id
       }
     };
-    
+     
     // 4. Payment open karo
     const rzp = new Razorpay(options);
     rzp.open();
