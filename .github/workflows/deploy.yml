@@ -3,16 +3,6 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
 
 jobs:
   build:
@@ -21,17 +11,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: Debug - Show folder structure
+      - name: Force create .nojekyll file
         run: |
-          echo "Public folder content:"
-          ls -la public/
-          echo "JS files:"
-          ls -la public/js/ || echo "No JS folder found"
+          cd public
+          touch .nojekyll
+          echo "✅ .nojekyll file created forcefully"
       
-      - name: Setup GitHub Pages
-        uses: actions/configure-pages@v4
-        
-      - name: Upload public folder
+      - name: Disable Jekyll processing
+        run: |
+          cd public
+          echo "✅ Jekyll disabled for GitHub Pages"
+      
+      - name: Upload to GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
           path: "public"
