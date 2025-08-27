@@ -20,25 +20,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: Create .nojekyll file
+      - name: Create .nojekyll and disable security
         run: |
           cd public
           touch .nojekyll
-          echo "✅ .nojekyll file created"
-      
-      - name: Debug - Show folder structure
-        run: |
-          echo "Public folder content:"
-          ls -la public/
-          echo "Snippets folder:"
-          ls -la public/snippets/ || echo "No snippets folder"
-          echo "JS files:"
-          ls -la public/js/ || echo "No JS folder found"
+          
+          # Add security headers to fix JS execution
+          echo '<meta name="referrer" content="no-referrer">' > security-headers.html
+          echo '<meta http-equiv="Content-Security-Policy" content="default-src '"'self'"' '"'unsafe-inline'"' '"'unsafe-eval'"'">' >> security-headers.html
+          
+          echo "✅ Security headers prepared"
       
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v4
         
-      - name: Upload public folder as artifact
+      - name: Upload public folder
         uses: actions/upload-pages-artifact@v3
         with:
           path: "public"
