@@ -10,12 +10,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+        with:
+          persist-credentials: false  # ✅ Important fix
+
       - name: Create .nojekyll file
         run: echo "" > public/.nojekyll
-      
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
+          force_orphan: true
